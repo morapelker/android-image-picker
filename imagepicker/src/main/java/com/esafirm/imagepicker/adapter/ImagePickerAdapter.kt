@@ -65,7 +65,7 @@ class ImagePickerAdapter(
         if (ImagePickerUtils.isVideoFormat(image)) {
             if (!videoDurationHolder.containsKey(image.id)) {
                 videoDurationHolder[image.id] = ImagePickerUtils.getVideoDurationLabel(
-                    context, File(image.path)
+                    context, image.path
                 )
             }
 

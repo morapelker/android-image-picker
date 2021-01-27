@@ -109,18 +109,22 @@ public class ImagePickerUtils {
         return mimeType != null && mimeType.startsWith("video");
     }
 
-    public static String getVideoDurationLabel(Context context, File file) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(context, Uri.fromFile(file));
-        Long duration = Long.parseLong(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-        retriever.release();
-        long second = (duration / 1000) % 60;
-        long minute = (duration / (1000 * 60)) % 60;
-        long hour = (duration / (1000 * 60 * 60)) % 24;
-        if (hour > 0) {
-            return String.format("%02d:%02d:%02d", hour, minute, second);
-        } else {
-            return String.format("%02d:%02d", minute, second);
+    public static String getVideoDurationLabel(Context context, String filePath) {
+        try {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            MediaPlayerUtils.setMediaPlayerDataSource(context, retriever, filePath);
+            Long duration = Long.parseLong(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+            retriever.release();
+            long second = (duration / 1000) % 60;
+            long minute = (duration / (1000 * 60)) % 60;
+            long hour = (duration / (1000 * 60 * 60)) % 24;
+            if (hour > 0) {
+                return String.format("%02d:%02d:%02d", hour, minute, second);
+            } else {
+                return String.format("%02d:%02d", minute, second);
+            }
+        } catch (Exception ex) {
+            return "00:00";
         }
     }
 
